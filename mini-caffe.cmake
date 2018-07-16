@@ -54,6 +54,7 @@ else(MSVC)
   endif()
 endif(MSVC)
 
+
 # source file structure
 file(GLOB CAFFE_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/include/caffe/*.h
                         ${CMAKE_CURRENT_LIST_DIR}/include/caffe/*.hpp)

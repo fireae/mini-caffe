@@ -188,6 +188,11 @@ message LayerParameter {
   // for their implementation. These layers include an Engine type and
   // engine parameter for selecting the implementation.
   // The default for the engine is set by the ENGINE switch at compile-time.
+  optional DenseBlockParameter denseblock_param = 147;
+  optional CTCDecoderParameter ctc_decoder_param = 158;
+  optional ReverseParameter reverse_param = 160;
+  optional ReverseTimeParameter reverse_time_param = 161;
+
   optional ArgMaxParameter argmax_param = 201;
   optional BatchNormParameter batch_norm_param = 202;
   optional BiasParameter bias_param = 203;
@@ -229,6 +234,9 @@ message LayerParameter {
   optional PriorBoxParameter prior_box_param = 240;
   optional ShuffleChannelParameter shuffle_channel_param = 241;
   optional NormalizeParameter norm_param = 242;
+
+  optional TransposeParameter transpose_param=8266710;
+  optional LSTMParameter lstm_param = 8266711;
 }
 
 // Message that stores parameters shared by loss layers
@@ -937,6 +945,87 @@ message NormalizeParameter {
   optional bool channel_shared = 3 [default = true];
   // Epsilon for not dividing by zero while normalizing variance
   optional float eps = 4 [default = 1e-10];
+}
+
+message TransposeParameter {
+  // For example, if you want to transpose NxCxHxW into WxNxHxC, 
+  // the parameter should be the following:
+  // transpose_param { dim: 3 dim: 0 dim: 2 dim: 1 }
+  // ie, if the i-th dim has value n, then the i-th axis of top is equal to the n-th axis of bottom.
+  repeated int32 dim=1;
+}
+
+message ReverseParameter {
+  // axis controls the data axis which shall be inverted.
+  // The layout of the content will not be inverted
+  //
+  // The default axis is 0 that means:
+  //   data_previous[n] == data_afterwards[N - n -1]
+  // where N is the shape of axis(n)
+  //
+  // Usually this layer will be used with recurrent layers to invert the
+  // time axis which is axis 0
+  // This layer will therefore swap the order in time but not the
+  // order of the actual data.
+  optional int32 axis = 1 [default = 0];
+}
+
+message ReverseTimeParameter {
+  // if true the rest of the sequence will not be reversed but copied
+  // if false no more operation will be performed for the reset.
+  //   this can lead to random numbers in the blob.
+  optional bool copy_remaining = 1 [default = false];
+}
+
+// Message that stores parameters used by LSTMParameter
+message LSTMParameter {
+  optional uint32 num_output = 1; // The number of outputs for the layer
+  optional float clipping_threshold = 2 [default = 0.0];
+  optional FillerParameter weight_filler = 3; // The filler for weight
+  optional FillerParameter bias_filler = 4; // The filler for the bias
+  optional uint32 batch_size = 5 [default = 1];
+}
+
+message DenseBlockParameter {
+  //if you don't use BC, BN-ReLU-Conv3 is one transition
+  //if you use BC, then BN-ReLU-Conv1-BN-ReLU-Conv3 is one transition
+  optional int32 numTransition = 1 [default = 40];
+  optional int32 initChannel = 2 [default = 16];
+  optional int32 growthRate = 3 [default = 12];
+  //Convolution related parameters
+  optional int32 pad_h = 4 [default = 1];
+  optional int32 pad_w = 5 [default = 1];
+  optional int32 conv_verticalStride = 6 [default = 1];
+  optional int32 conv_horizentalStride = 7 [default = 1];
+  optional int32 filter_H = 8 [default = 3];
+  optional int32 filter_W = 9 [default = 3];
+  optional FillerParameter Filter_Filler = 10;
+  //BN related parameters
+  optional FillerParameter BN_Scaler_Filler = 11;
+  optional FillerParameter BN_Bias_Filler = 12;
+  //Performance Related parameters
+  optional int32 gpuIdx = 15 [default = 0];
+  //Dropout related parameter
+  optional bool use_dropout = 16 [default = false];
+  optional float dropout_amount = 17 [default = 0];
+  optional bool use_BC = 18 [default = false];
+  //If it is not ultra space efficient, then it stores output data of conv1
+  optional bool BC_ultra_space_efficient = 19 [default = false];
+  optional int32 workspace_MB = 20 [default = 8];
+  optional float moving_average_fraction = 21 [default = 0.1];
+}
+
+message CTCDecoderParameter {
+  // The index of the blank index in the labels. A negative (default)
+  // value will use the last index
+  optional int32 blank_index = 1 [default = 0];
+
+  // Collapse the repeated labels during the ctc calculation
+  // e.g. collapse [0bbb11bb11bb0b2] to [01102] instead of [0111102],
+  // where b means blank label.
+  // The default behaviour is to merge repeated labels.
+  // Note: blank labels will be removed in any case.
+  optional bool ctc_merge_repeated = 2 [default = true];
 }
 
 // DEPRECATED: use LayerParameter.

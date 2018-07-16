@@ -20,6 +20,7 @@ void InputLayer::LayerSetUp(const vector<Blob*>& bottom,
   }
 }
 
+
 REGISTER_LAYER_CLASS(Input);
 
 }  // namespace caffe
