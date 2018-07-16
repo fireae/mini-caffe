@@ -188,10 +188,6 @@ message LayerParameter {
   // for their implementation. These layers include an Engine type and
   // engine parameter for selecting the implementation.
   // The default for the engine is set by the ENGINE switch at compile-time.
-  optional DenseBlockParameter denseblock_param = 147;
-  optional CTCDecoderParameter ctc_decoder_param = 158;
-  optional ReverseParameter reverse_param = 160;
-  optional ReverseTimeParameter reverse_time_param = 161;
 
   optional ArgMaxParameter argmax_param = 201;
   optional BatchNormParameter batch_norm_param = 202;
@@ -235,8 +231,18 @@ message LayerParameter {
   optional ShuffleChannelParameter shuffle_channel_param = 241;
   optional NormalizeParameter norm_param = 242;
 
-  optional TransposeParameter transpose_param=8266710;
-  optional LSTMParameter lstm_param = 8266711;
+  //optional DenseBlockParameter denseblock_param = 147;
+  //optional CTCDecoderParameter ctc_decoder_param = 158;
+  //optional ReverseParameter reverse_param = 160;
+  //optional ReverseTimeParameter reverse_time_param = 161;
+  //optional TransposeParameter transpose_param=8266710;
+  //optional LSTMParameter lstm_param = 8266711;
+  optional TransposeParameter transpose_param=243;
+  optional LSTMParameter lstm_param =244;
+  optional DenseBlockParameter denseblock_param = 245;
+  optional CTCDecoderParameter ctc_decoder_param = 246;
+  optional ReverseParameter reverse_param = 247;
+  optional ReverseTimeParameter reverse_time_param = 248;
 }
 
 // Message that stores parameters shared by loss layers

@@ -11,10 +11,6 @@ using namespace cv;
 using namespace std;
 using namespace caffe;
 
-struct BBox {
-  float x1, y1, x2, y2, score;
-  int label;
-};
 
 int main(int argc, char *argv[]) {
   if (caffe::GPUAvailable()) {
@@ -50,7 +46,7 @@ int main(int argc, char *argv[]) {
   bgr[2].convertTo(bgr[2], CV_32F, 1.f, -152.0f);
 
   // fill network input
-  shared_ptr<Blob> data = net.blob_by_name("data");
+  Blob* data = net.blob_by_name_mutable("data");
   data->Reshape(1, 3, imgResized.rows, imgResized.cols);
   const int bias = data->offset(0, 1, 0, 0);
   const int bytes = bias * sizeof(float);

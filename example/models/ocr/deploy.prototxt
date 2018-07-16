@@ -5,7 +5,7 @@ layer {
   top: "data"
   type: "Input"
   input_param {
-   shape {dim: 1 dim: 3 dim: 32 dim: 572}
+   shape {dim: 1 dim: 3 dim: 32 dim: 280}
   }
 }
 

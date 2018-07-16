@@ -311,6 +311,13 @@ const shared_ptr<Blob> Net::blob_by_name(const string& blob_name) const {
   return blob_ptr;
 }
 
+Blob* Net::blob_by_name_mutable(const string& blob_name)  {
+  shared_ptr<Blob> blob_ptr;
+  CHECK(has_blob(blob_name)) << "Unknown blob name " << blob_name;
+  blob_ptr = blobs_[blob_names_index_.find(blob_name)->second];
+  return blob_ptr.get();
+}
+
 shared_ptr<NetParameter> ReadTextNetParameterFromFile(const string& file) {
   shared_ptr<NetParameter> np(new NetParameter);
   ReadNetParamsFromTextFileOrDie(file, np.get());

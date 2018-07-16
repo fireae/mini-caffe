@@ -4,7 +4,8 @@ build
 src/proto/caffe.pb.h
 src/proto/caffe.pb.cc
 tools/caffe_pb2.py
-
+3rdparty/src
+3rdparty/src/OpenBLAS
 *.pyc
 *.lib
 *.dll

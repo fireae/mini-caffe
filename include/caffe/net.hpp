@@ -104,7 +104,7 @@ class CAFFE_API Net {
   }
   bool has_blob(const string& blob_name) const;
   const shared_ptr<Blob> blob_by_name(const string& blob_name) const;
-
+  Blob* blob_by_name_mutable(const string& blob_name);
   /// @brief mark extra output named blob
   void MarkOutputs(const std::vector<std::string>& outs);
 
